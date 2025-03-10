@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Bank Payment</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(#f6c350, #e95508d4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 900px;
+            height: 75vh;
+            gap: 10px;
+        }
+
+        .payment-options, .card-details, .card-preview {
+            width: 100%;
+            max-width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .card-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6%;
+        }
+
+        .card {
+            width: 250px;
+            height: 150px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+        }
+
+        .card-front {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+        }
+
+        .card-back {
+            background-color: #444;
+            color: white;
+            padding: 15px;
+            transform: rotateY(180deg);
+        }
+
+        .card.flip .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+            }
+            .payment-options, .card-details, .card-preview {
+                width: 32%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-options">
+            <h2>Select Payment Method</h2>
+            <select id="payment-method">
+                <option value="credit-card"> Card</option>
+                <option value="paypal">wallet</option>
+                <option value="google-pay">Net Banking</option>
+            </select>
+        </div>
+
+        <div class="card-details">
+            <h2>Enter Card Details</h2>
+            <form id="card-form">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required>
+
+                <label for="card-name">Cardholder Name:</label>
+                <input type="text" id="card-name" placeholder="Cardholder Name" required>
+
+                <label for="expiration-date">Expiration Date:</label>
+                <input type="text" id="expiration-date" placeholder="MM/YY" maxlength="5" required>
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" maxlength="3" placeholder="CVV" required>
+            </form>
+        </div>
+
+        <div class="card-preview">
+            <h2>Card Preview</h2>
+            <div class="card" id="card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-header">
+                            <span class="card-type">Credit Card</span>
+                        </div>
+                        <div class="card-body">
+                            <p id="card-number-preview">XXXX XXXX XXXX XXXX</p>
+                            <p id="card-name-preview">Cardholder Name</p>
+                            <p id="expiration-date-preview">MM/YY</p>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <p id="cvv-preview">***</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('card-form').addEventListener('input', updateCardPreview);
+        document.getElementById('cvv').addEventListener('focus', flipCard);
+        document.getElementById('cvv').addEventListener('blur', unflipCard);
+
+        function updateCardPreview() {
+            const cardNumber = document.getElementById('card-number').value;
+            const cardName = document.getElementById('card-name').value;
+            const expirationDate = document.getElementById('expiration-date').value;
+            const cvv = document.getElementById('cvv').value;
+
+            document.getElementById('card-number-preview').textContent = formatCardNumber(cardNumber);
+            document.getElementById('card-name-preview').textContent = cardName || 'Cardholder Name';
+            document.getElementById('expiration-date-preview').textContent = expirationDate || 'MM/YY';
+            document.getElementById('cvv-preview').textContent = cvv ? cvv : '***';
+        }
+
+        function formatCardNumber(cardNumber) {
+            return cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.add('flip');
+        }
+
+        function unflipCard() {
+            document.getElementById('card').classList.remove('flip');
+        }
+    </script>
+</body>
+</html>
