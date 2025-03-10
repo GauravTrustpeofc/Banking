@@ -100,6 +100,10 @@
         .card.flip .card-inner {
             transform: rotateY(180deg);
         }
+        div#payment-method {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;}
 
         @media (min-width: 768px) {
             .container {
@@ -116,18 +120,18 @@
     <div class="container">
         <div class="payment-options">
             <h2>Select Payment Method</h2>
-            <select id="payment-method">
-                <option value="credit-card"> Card</option>
-                <option value="paypal">wallet</option>
-                <option value="google-pay">Net Banking</option>
-            </select>
+            <div id="payment-method">
+                <a value="credit-card"> Card</a>
+                <a value="paypal">wallet</a>
+                <a value="google-pay">Net Banking</a>
+            </div>
         </div>
 
         <div class="card-details">
             <h2>Enter Card Details</h2>
             <form id="card-form">
                 <label for="card-number">Card Number:</label>
-                <input type="text" id="card-number" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required>
+                <input type="Number" id="card-number" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required>
 
                 <label for="card-name">Cardholder Name:</label>
                 <input type="text" id="card-name" placeholder="Cardholder Name" required>
